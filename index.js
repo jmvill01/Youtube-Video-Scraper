@@ -46,7 +46,7 @@ function printToFile (link) {
 }
  
 function readInputFile () {
-    fs.readFile('logicGateInput.csv', 'utf-8', (err, data) => {  //Not working
+    fs.readFile('logicGateInput.csv', 'utf-8', (err, data) => {
         if (err) throw err;
        inputLogicGate = data.toString();
     }) 
