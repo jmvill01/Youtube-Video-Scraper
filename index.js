@@ -4,32 +4,33 @@ const axios = require('axios')
 const cheerio = require('cheerio')
 const express = require('express')
 const app = express()
-const url = 'https://en.wikipedia.org/wiki/Logic_gate'
-var inputLogicGate = readInputFile() 
+const authorUrl = 'https://www.youtube.com/c/'
+const videoUrl = 'https://www.youtube.com/embed/'
+var inputAuthors = readInputFile() 
 
-axios (url).then(response => {
+axios (authorUrl).then(response => {
         const html = response.data
         const info = cheerio.load(html)
-        const logicGates = []
+        const yt_authors = []
         
-        //-------------------------- Searches and Scrapes from Wiki --------------------------
+        //-------------------------- Searches and Scrapes from Author Page --------------------------
         info('b', html).each(function() {
-            const lgLink = info(this).find('a').attr('href')
-            const lgText = info(this).text()
-            logicGates.push({
-                lgText,
-                lgLink
+            const idVideo = info(this).find('a').attr('href')               //Identify video tags/attributes
+            const videoText = info(this).text()                             //Grab video title for website title tag
+            videos.push({
+                videoText,
+                idVideo
             })
         })
 
-        //-------------------------- Displays Logic Gate WikiLink --------------------------
-        console.log(logicGates) 
-        console.log("Searching for:", inputLogicGate)
-        for (var i = 0; i < logicGates.length; i++) {
+        //-------------------------- Displays Video Link/ID  --------------------------
+        console.log(videos) 
+        console.log("Searching for:", inputAuthors)
+        for (var i = 0; i < videos.length; i++) {
             
-            if (logicGates[i].lgText == inputLogicGate) {
-                 console.log(logicGates[i].lgText + ':','https://en.wikipedia.org' + logicGates[i].lgLink)
-                 printToFile('https://en.wikipedia.org' + logicGates[i].lgLink)
+            if (videos[i].videoText == inputAuthors) {
+                 console.log(videos[i].videoText + ':','https://en.wikipedia.org' + videos[i].idVideo)
+                 printToFile('https://en.wikipedia.org' + videos[i].idVideo)
             } 
         }
 
@@ -48,6 +49,6 @@ function printToFile (link) {
 function readInputFile () {
     fs.readFile('logicGateInput.csv', 'utf-8', (err, data) => {
         if (err) throw err;
-       inputLogicGate = data.toString();
+       inputAuthors = data.toString();
     }) 
 }
